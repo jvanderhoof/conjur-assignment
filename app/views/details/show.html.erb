@@ -1,10 +1,6 @@
 <%
-    # Pulling just the specific nodes and data
-    nodes = @data["database"]["replication_status"]["pg_stat_replication"]
-    
-    # Sort the nodes according to application name, backwards, so "standby" comes first
-    nodes.sort! { |a, b|  b["application_name"] <=> a["application_name"] }
-    
+
+    # Set the variables and classnames
     statuses = @data["services"]
     allOkay = true
     anyOkay = false
@@ -26,7 +22,7 @@
     end
 %>
 
-<% provide(:title, "General Data") %>
+<% provide(:title, "Cluster Data for " + @master) %>
 
 <div class="container">
     
@@ -64,7 +60,7 @@
     <div class="row">
         <div class="col-md-12">
             
-            <% nodes.each_with_index do |node, index|%>
+            <% @nodes.each_with_index do |node, index|%>
                 <% date = DateTime.parse(node["backend_start"]) %>
             
                     <div class="panel panel-<%= node["application_name"] == "standby" ? "primary" : "info" %> node node-type-<%= node["application_name"] %>">

@@ -16,5 +16,18 @@ class DetailsController < ApplicationController
       @data = JSON.parse open(remoteJSON, {ssl_verify_mode: OpenSSL::SSL::VERIFY_NONE}).read
       
       @master = URI.decode( params[:id] )
+      
+      #@nodes = @data["database"]["replication_status"]["pg_stat_replication"]
+      
+      # Sort the nodes according to application name, backwards, so "standby" comes first
+      #@nodes.sort { |a, b| [b['application_name']] <=> [a['application_name'], a['backend_start']] }
+      #@nodes.sort { |a, b| a['backend_start'] }
+      
+      # Pulling just the specific nodes and data
+      @nodes = @data["database"]["replication_status"]["pg_stat_replication"]
+      
+      # Sort the nodes according to application name, backwards, so "standby" comes first
+      @nodes.sort! { |a, b|  [b["application_name"], a['backend_start']] <=> [a["application_name"], b['backend_start']] }
+    
     end
 end

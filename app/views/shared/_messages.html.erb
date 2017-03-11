@@ -1,0 +1,21 @@
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <% flash.each do |key, value| %>
+                <div class="alert alert-<%= key %> alert-dismissible fade in hide" role="alert" data-alert-type="<%= key %>">
+                  <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                  <% 
+                    if key == "danger" 
+                        echo('<span class="glyphicon glyphicon-fire larger left"></span>&nbsp;&nbsp;')
+                    end
+                    if key == "warning" 
+                        echo('<span class="glyphicon glyphicon-exclamation-sign larger left"></span>&nbsp;&nbsp;')
+                    end
+                  %>
+                  
+                  <%= sanitize(value) %>
+                </div>
+            <% end %>
+        </div>
+    </div>
+</div>
