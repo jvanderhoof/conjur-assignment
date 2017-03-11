@@ -1,0 +1,43 @@
+<% provide(:title, "Clusters") %>
+
+<div class="container">
+    
+    <div class="row">
+        <div class="col-md-12">
+            <h3><span class="glyphicon glyphicon-cloud larger left"></span> <strong>Clusters</strong></h3>
+            
+            <div class="list-group">
+                <% @clusters.each do |cluster, url| %>
+                    <% 
+                        data = JSON.parse open(url, {ssl_verify_mode: OpenSSL::SSL::VERIFY_NONE}).read 
+                        status = data["services"]["ok"]
+                        statuses = data["services"]
+                        allOkay = true
+                        anyOkay = false
+                        statuses.each do |key, status| 
+                            if status != "ok" && status != true
+                                allOkay = false
+                            end
+                            if status == "ok" || status == true
+                                anyOkay = true
+                            end
+                        end
+                        
+                        statusClass = "success"
+                        if !allOkay && anyOkay
+                            statusClass = "warning"
+                        end
+                        if !allOkay && !anyOkay
+                            statusClass = "danger"
+                        end
+        
+                        buttonHTML =  '<span class="glyphicon glyphicon-zoom-in larger left"></span> &nbsp;&nbsp; <span class="pull-right label label-' + statusClass + '">' + ( status == true ? 'OK <span class="glyphicon glyphicon-ok"></span>': 'Errors <span class="glyphicon glyphicon-remove"></span>' ) + '</span>'
+                    %>
+                    
+                    <%= link_to buttonHTML.html_safe + cluster, { controller: :details, action: :show, id: URI.encode(cluster, /\W/), url: URI.encode(url, /\W/) }, class: 'list-group-item list-group-item-' + statusClass  %>
+                    
+                <% end %>
+            </div>
+        </div>
+    </div>
+</div>

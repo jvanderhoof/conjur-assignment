@@ -1,0 +1,85 @@
+{
+  "services": {
+    "audit": "error",
+    "authn": "error",
+    "ldap-sync": "error",
+    "authz": "error",
+    "rotation": "error",
+    "expiration": "error",
+    "host-factory": "error",
+    "ldap": "error",
+    "pubkeys": "error",
+    "core": "error",
+    "ok": false
+  },
+  "database": {
+    "ok": true,
+    "connect": {
+      "main": "ok",
+      "archive": "ok"
+    },
+    "free_space": {
+      "main": {
+        "inodes": 1065510,
+        "kbytes": 14510300
+      },
+      "archive": {
+        "inodes": 1065510,
+        "kbytes": 14510300
+      }
+    },
+    "replication_status": {
+      "pg_stat_replication": [
+        {
+          "usename": "conjur-follower-conjurops-4-8-0-rc2.us-east-1.itp.conjur.net",
+          "application_name": "follower",
+          "client_addr": "54.211.178.99",
+          "backend_start": "2016-12-14 11:08:21 +0000",
+          "state": "streaming",
+          "sent_location": "8/2EEA44D8",
+          "replay_location": "8/2EEA44D8",
+          "sync_priority": 0,
+          "sync_state": "async",
+          "sent_location_bytes": 35146843352,
+          "replay_location_bytes": 35146843352,
+          "replication_lag_bytes": 0
+        },
+        {
+          "usename": "conjur-follower-conjurops-4-8-0-rc2.us-east-1.itp.conjur.net",
+          "application_name": "follower",
+          "client_addr": "107.23.142.215",
+          "backend_start": "2016-11-14 17:37:21 +0000",
+          "state": "streaming",
+          "sent_location": "8/2EEA44D8",
+          "replay_location": "8/2EEA44D8",
+          "sync_priority": 0,
+          "sync_state": "async",
+          "sent_location_bytes": 35146843352,
+          "replay_location_bytes": 35146843352,
+          "replication_lag_bytes": 0
+        },
+        {
+          "usename": "localhost",
+          "application_name": "standby",
+          "client_addr": "107.21.89.217",
+          "backend_start": "2017-01-17 20:23:05 +0000",
+          "state": "streaming",
+          "sent_location": "8/2EEA44D8",
+          "replay_location": "8/2EEA44D8",
+          "sync_priority": 0,
+          "sync_state": "async",
+          "sent_location_bytes": 35146843352,
+          "replay_location_bytes": 35146843352,
+          "replication_lag_bytes": 0
+        }
+      ],
+      "pg_current_xlog_location": "8/2EEA44D8",
+      "pg_current_xlog_location_bytes": 35146843352
+    },
+    "archive_replication_status": {
+      "pg_current_xlog_location": "EB/6617D710",
+      "pg_current_xlog_location_bytes": 1011030152976
+    }
+  },
+  "ok": true
+}

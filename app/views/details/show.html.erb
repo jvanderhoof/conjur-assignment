@@ -1,0 +1,88 @@
+<%
+    # Pulling just the specific nodes and data
+    nodes = @data["database"]["replication_status"]["pg_stat_replication"]
+    
+    # Sort the nodes according to application name, backwards, so "standby" comes first
+    nodes.sort! { |a, b|  b["application_name"] <=> a["application_name"] }
+    
+    statuses = @data["services"]
+    allOkay = true
+    anyOkay = false
+    statuses.each do |key, status| 
+        if status != "ok" && status != true
+            allOkay = false
+        end
+        if status == "ok" || status == true
+            anyOkay = true
+        end
+    end
+    
+    headerClass = "panel-success"
+    if !allOkay && anyOkay
+        headerClass = "panel-warning"
+    end
+    if !allOkay && !anyOkay
+        headerClass = "panel-danger"
+    end
+%>
+
+<% provide(:title, "General Data") %>
+
+<div class="container">
+    
+    <div class="row">
+        <div class="col-md-12">
+            <h3>
+                <span class="glyphicon glyphicon-cloud larger left"></span>
+                <strong>Cluster Status</strong> <span class="glyphicon glyphicon-chevron-right smaller"></span> <%= @master %>
+            </h3>
+            
+            <div class="panel-group">
+                <div class="panel <%= headerClass %>">
+                    <div class="panel-heading" data-toggle="collapse" href="#collapse1">
+                        <h4 class="panel-title">
+                            <span class="glyphicon glyphicon-signal larger"></span>
+                            &nbsp; View Status Summary
+                            <span class="glyphicon glyphicon-collapse-up larger right"></span>
+                        </h4>
+                    </div>
+                    <div id="collapse1" class="collapse in">
+                        <div class="panel-body status-output">
+                            <% statuses.each do |key, status| %>
+                                <% if key != "ok" %>
+                                    <div class="col-md-3 col-sm-6"><span class="glyphicon glyphicon-<%= status == "ok" ? "ok" : "remove" %>"></span> <strong><%= key %></strong></div>
+                                <% end %>
+                            <% end %>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-12">
+            
+            <% nodes.each_with_index do |node, index|%>
+                <% date = DateTime.parse(node["backend_start"]) %>
+            
+                    <div class="panel panel-<%= node["application_name"] == "standby" ? "primary" : "info" %> node node-type-<%= node["application_name"] %>">
+                        <div class="panel-heading">
+                            <span class="glyphicon glyphicon-hdd larger"></span>
+                            <strong>Node:</strong> <%= node["usename"] %>
+                        </div>
+                        <div class="panel-body">
+                            <p>
+                                <strong>Type:</strong> <%= node["application_name"] %><br/>
+                                <strong>IP: </strong> <%= node["client_addr"] %><br/>
+                                <strong>State: </strong> <%= node["state"] %><br/>
+                                <strong>Start Time: </strong> <%= date.strftime("%B %-d, %Y %l:%M %p") %><br/>
+                            </p>
+                        </div>
+                    </div>
+            
+            <% end %>
+        </div>
+    </div>
+</div>
